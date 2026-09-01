@@ -1,5 +1,8 @@
 import React from 'react'
 import { TaskStats } from '../features/tasks/components/TaskStatus'
+import { TaskToolbar } from '../features/tasks/components/TaskToolbar'
+import { TaskTable } from '../features/tasks/components/TaskTable'
+import { TaskCardList } from '../features/tasks/components/TaskCardList'
 
 export function TaskPage(){
   return (
@@ -23,6 +26,15 @@ export function TaskPage(){
         <div className='mb-5'>
             <TaskStats/>
         </div>
+
+        <div>
+            <TaskToolbar/>
+        </div>
+
+        <TaskTable/>
+        <TaskCardList/>
+
+        
     </div>
   )
 }

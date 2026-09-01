@@ -1,4 +1,4 @@
-export function TaskStats(){
+export function TaskStats() {
     const counts = {
         total: 320,
         overdue: 24,
@@ -6,7 +6,7 @@ export function TaskStats(){
         urgent: 7,
     };
 
-    return(
+    return (
         <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Task summary">
 
             <div className="rounded-md border border-line px-3 py-2 text-sm">
