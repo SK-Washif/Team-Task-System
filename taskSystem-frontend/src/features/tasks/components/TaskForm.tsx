@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useId, useState, type RefObject } from "react";
 import {
   PRIORITY_LABEL,
   PRIORITY_ORDER,
@@ -21,9 +21,10 @@ const buttonPrimary = "bg-ink text-white border-ink hover:bg-ink-soft active:bg-
 interface TaskFormProps {
   onSubmit: (task: Omit<Task, "id" | "createdAt">) => Promise<void>;
   onCancel: () => void;
+  firstInputRef?: RefObject<HTMLInputElement | null>;
 }
 
-export function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
+export function TaskForm({ onSubmit, onCancel, firstInputRef }: TaskFormProps) {
   const titleId = useId();
   const [title, setTitle] = useState("");
   const [ownerName, setOwnerName] = useState("");
@@ -63,6 +64,7 @@ export function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
           Title
         </label>
         <input
+          ref={firstInputRef}
           id={titleId}
           className={inputClass}
           value={title}

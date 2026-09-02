@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { type RefObject } from "react";
+
 import {
     PRIORITY_LABEL,
     PRIORITY_ORDER,
@@ -7,17 +8,21 @@ import {
     type TaskFilters,
 } from "../types/task.types";
 
-
 interface FilterFieldsProps {
     filters: TaskFilters;
     owners: string[];
     onChange: (next: Partial<TaskFilters>) => void;
     layout?: "row" | "stack";
+    firstFilterRef?: RefObject<HTMLSelectElement | null>;
 }
 
-
-export function FilterFields({ filters, owners, onChange, layout = "row" }: FilterFieldsProps) {
-    
+export function FilterFields({
+    filters,
+    owners,
+    onChange,
+    layout = "row",
+    firstFilterRef,
+}: FilterFieldsProps) {
     const wrapClass = layout === "row" ? "flex flex-wrap gap-2" : "flex flex-col gap-4";
     const fieldClass = layout === "row" ? "w-40" : "w-full";
 
@@ -25,6 +30,7 @@ export function FilterFields({ filters, owners, onChange, layout = "row" }: Filt
         <div className={wrapClass}>
             <Field label="Status" layout={layout} className={fieldClass}>
                 <select
+                    ref={layout === "stack" ? (firstFilterRef as any) : undefined}
                     className="h-10 w-full rounded-md border border-line bg-white px-3 text-sm text-ink transition-colors hover:border-ink-faint focus-ring disabled:bg-line-soft disabled:text-ink-faint"
                     value={filters.status}
                     onChange={(e) => onChange({ status: e.target.value as TaskFilters["status"] })}
@@ -98,7 +104,7 @@ export function FilterFields({ filters, owners, onChange, layout = "row" }: Filt
                 </select>
             </Field>
 
-            <label className="flex items-center gap-2 rounded-md border border-line px-3 py-2 text-sm text-ink transition-colors hover:bg-line-soft has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ink">
+            <label className="flex items-center gap-2 rounded-md border border-line px-3 py-2 text-sm text-ink transition-colors hover:bg-line-soft has-focus-visible:outline-2 has-focus-visible:outline-ink">
                 <input
                     type="checkbox"
                     checked={filters.overdueOnly}

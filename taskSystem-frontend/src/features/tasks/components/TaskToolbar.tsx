@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FiSearch } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import { FilterFields } from "./FilterFields";
 import type { TaskFilters } from "../types/task.types";
 import { useDebouncedValue } from "../../../hooks/useDebouncedValue";
+import { useFocusTrap } from "../../../hooks/useFocusTrap";
 
 const inputClass =
   "h-10 w-full rounded-md border border-line bg-white px-3 text-sm text-ink placeholder:text-ink-faint transition-colors hover:border-ink-faint focus-ring disabled:bg-line-soft disabled:text-ink-faint";
@@ -26,6 +27,16 @@ export function TaskToolbar({ filters, owners, hasActiveFilters, onChange, onRes
   const [q, setQ] = useState(filters.q);
   const debouncedQ = useDebouncedValue(q, 250);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const filterButtonRef = useRef<HTMLButtonElement>(null);
+  const firstFilterRef = useRef<HTMLSelectElement>(null);
+
+  // Focus trap for the drawer
+  const drawerRef = useFocusTrap({
+    isOpen: drawerOpen,
+    onClose: () => setDrawerOpen(false),
+    initialFocusRef: firstFilterRef,
+    returnFocusRef: filterButtonRef,
+  });
 
   useEffect(() => setQ(filters.q), [filters.q]);
   useEffect(() => {
@@ -33,16 +44,11 @@ export function TaskToolbar({ filters, owners, hasActiveFilters, onChange, onRes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQ]);
 
-  // Filter drawer: lock body scroll and close on Escape while open.
+  // Lock body scroll when drawer is open
   useEffect(() => {
     if (!drawerOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setDrawerOpen(false);
-    };
-    document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => {
-      document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
   }, [drawerOpen]);
@@ -58,7 +64,6 @@ export function TaskToolbar({ filters, owners, hasActiveFilters, onChange, onRes
     <div className="flex flex-col gap-3">
       <div className="flex gap-2">
         <div className="relative flex-1">
-          {/* ===== React Icon: FiSearch ===== */}
           <FiSearch className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" size={16} />
           <input
             className={`${inputClass} pl-9`}
@@ -69,8 +74,8 @@ export function TaskToolbar({ filters, owners, hasActiveFilters, onChange, onRes
           />
         </div>
 
-        {/* Mobile: filters open in a bottom sheet, never a row of dropdowns */}
         <button
+          ref={filterButtonRef}
           className={`${buttonBase} ${buttonSecondary} sm:hidden shrink-0`}
           onClick={() => setDrawerOpen(true)}
           aria-haspopup="dialog"
@@ -89,11 +94,12 @@ export function TaskToolbar({ filters, owners, hasActiveFilters, onChange, onRes
         )}
       </div>
 
-      {/* Mobile filter drawer (bottom sheet) */}
+      {/* Mobile filter drawer (bottom sheet) with focus trap */}
       {drawerOpen && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end sm:items-center sm:justify-center">
           <div className="absolute inset-0 bg-black/40" aria-hidden="true" onClick={() => setDrawerOpen(false)} />
           <div
+            ref={drawerRef}
             role="dialog"
             aria-modal="true"
             aria-label="Filter tasks"
@@ -106,12 +112,17 @@ export function TaskToolbar({ filters, owners, hasActiveFilters, onChange, onRes
                 aria-label="Close"
                 className="rounded-md p-1 text-ink-soft transition-colors hover:bg-line-soft hover:text-ink focus-ring"
               >
-                {/* ===== React Icon: IoMdClose ===== */}
                 <IoMdClose size={20} />
               </button>
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-              <FilterFields filters={filters} owners={owners} onChange={onChange} layout="stack" />
+              <FilterFields
+                filters={filters}
+                owners={owners}
+                onChange={onChange}
+                layout="stack"
+                firstFilterRef={firstFilterRef}
+              />
             </div>
             <div className="shrink-0 border-t border-line px-5 py-3">
               <div className="flex gap-2">
