@@ -34,7 +34,9 @@ No database, no environment variables, and no setup beyond `npm install`. All da
 ## Screenshots
 
 375px (mobile)
-![Mobile view](docs/375(mobile%20view).png) ![Mobile Filter view](docs/375%20(mobile%20filter%20view).png)
+![Mobile view](docs/375(mobile%20view).png) 
+------------------------------------------------
+![Mobile Filter view](docs/375%20(mobile%20filter%20view).png)
 
 
 768px (tablet)
