@@ -1,4 +1,4 @@
-import { generateTasks } from "../data/generateTask";
+import { generateTasks } from "../data/generateTasks";
 import type { Task } from "../types/task.types";
 
 //  fetchTasks , createTask , updateTaskStatus
