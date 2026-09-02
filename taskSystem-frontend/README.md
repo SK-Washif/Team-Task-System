@@ -38,17 +38,17 @@ No database, no environment variables, and no setup beyond `npm install`. All da
 ## Screenshots
 
 375px (mobile)
-![Mobile view](docs/375(mobile%20view).png) 
+![Mobile view](docs/375MobileView.png) 
 ------------------------------------------------
-![Mobile Filter view](docs/375%20(mobile%20filter%20view).png)
+![Mobile Filter view](docs/375MobileFilterView.png)
 
 
 768px (tablet)
-![Tablet view](docs/768(tab%20view).png) | ![Desktop view](docs/1280.png) |
+![Tablet view](docs/768TabView.png) 
 
 
 1280px (desktop)
-![Desktop view](docs/1280(desktop%20view).png)
+![Desktop view](docs/1280DesktopView.png)
 
 *(Filter drawer and task-detail modal shown separately below where relevant.)*
 
